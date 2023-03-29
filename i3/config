@@ -1,0 +1,215 @@
+######################################################
+## Системные настройки ##
+######################################################
+ 
+# Установка главной клавиши (Win)
+set $mod Mod4
+ 
+# Press MOD key and click on mouse to move your window
+floating_modifier $mod
+ 
+# Focus doesn't follow the mouse
+focus_follows_mouse no
+ 
+# Отключение точпада при старте
+exec xinput disable 11
+ 
+# Отключение тачскрина
+exec xinput disable 9
+
+
+ 
+######################################################
+## Настройка комбинаций клавиш клавиатуры ##
+######################################################
+ 
+# Запуск терминала
+bindsym $mod+Return exec kitty
+ 
+# Запуск скриншота экрана
+bindsym $mod+Print exec flameshot gui
+ 
+# Запуск утилиты выбора/запуска программ
+bindsym $mod+d exec --no-startup-id rofi -theme glue_pro_blue -font "JetBrains Mono 10" -show run
+ 
+# Запуск утилиты упралвения обоями рабочего стола
+exec nitrogen --restore
+ 
+# Запуск проводника
+bindsym $mod+f exec "kitty sh -c 'ranger'"
+ 
+# Настройка клавиш громкости
+# TODO: не работает, разобраться почему
+bindsym XF86AudioMute "exec amixer -D pulse sset Master toggle && notify-send \"Volume\" \"Sound is (un)muted\" --urgency low"
+bindsym XF86AudioRaiseVolume "exec amixer -D pulse sset Master 5%+ && notify-send \"Volume\" \"Volume added +5%\n Volume level is now $(amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=\"\"}{ print $3 }')\" --urgency low"
+bindsym XF86AudioLowerVolume "exec amixer -D pulse sset Master 5%- && notify-send \"Volume\" \"Volume added -5%\n Volume level is now $(amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=\"\"}{ print $3 }')\" --urgency low"
+ 
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
+# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send \"Volume\" \"Sound is (un)muted\" --urgency low"
+# bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+
+ 
+# Настройка клавиш яркости
+bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5 
+bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5 
+ 
+# Переопределяем картинку заставки
+# bindsym $mod+Control+l exec i3lock -i $HOME/.config/i3/lock-screen.png
+bindsym $mod+Control+l exec i3lock-fancy
+ 
+# redshift modes
+bindsym $mod+n mode "$mode_redshift"
+set $mode_redshift Set colour temperature: (a)uto, (r)eset, (2)500K, (3)000K, (4)000K, (5)500K (6)000K
+set $kill_redshift pkill -9 redshift;
+mode "$mode_redshift" {
+bindsym a exec --no-startup-id "$kill_redshift redshift -P -t 5000:4000", mode "default"
+bindsym r exec --no-startup-id "$kill_redshift redshift -x", mode "default"
+bindsym 2 exec --no-startup-id "$kill_redshift redshift -P -O 2500", mode "default"
+bindsym 3 exec --no-startup-id "$kill_redshift redshift -P -O 3000", mode "default"
+bindsym 4 exec --no-startup-id "$kill_redshift redshift -P -O 4000", mode "default"
+bindsym 5 exec --no-startup-id "$kill_redshift redshift -P -O 5500", mode "default"
+bindsym 6 exec --no-startup-id "$kill_redshift redshift -P -O 6000", mode "default"
+ 
+# exit mode: "Enter" or "Escape"
+bindsym Return mode "default"
+bindsym Escape mode "default"
+}
+
+
+ 
+######################################################
+## Визуальные настройки ##
+######################################################
+ 
+# Шрифт
+font pango: JetBrains Mono 10
+ 
+# Рамки для окон
+for_window [class=".*"] border pixel 5
+ 
+# Gaps for i3bar
+# for_window [class="i3bar"] gaps outer current set 10
+ 
+# Отступы
+# gaps inner 10
+# gaps outer 4
+ 
+# Настройки цветов
+client.focused #bf616a #2f343f #d8dee8 #bf616a #d8dee8
+client.focused_inactive #2f343f #kf343f #d8dee8 #2f343f #2f343f
+client.unfocused #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.urgent #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.placeholder #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.background #2f343f
+
+
+ 
+######################################################
+## Манипуляции с окнами и рабочими столами ##
+######################################################
+ 
+# Перемещение фокуса на другое окно
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+ 
+# Алтренативный вариант перемещения фокуса
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+ 
+# Переключение между рабочими столами
+bindsym $mod+1 workspace $workspace1
+bindsym $mod+2 workspace $workspace2
+bindsym $mod+3 workspace $workspace3
+bindsym $mod+4 workspace $workspace4
+ 
+# Перемещение окна на другой рабочий стол
+bindsym $mod+Shift+1 move container to workspace $workspace1
+bindsym $mod+Shift+2 move container to workspace $workspace2
+bindsym $mod+Shift+3 move container to workspace $workspace3
+bindsym $mod+Shift+4 move container to workspace $workspace4
+ 
+# TODO: исправить ошибку
+# Resizing Windows
+# bindsym $mod+Contral+l resize shrink width 10 px or 10 ppt
+# bindsym $mod+Ctrl+k resize grow height 10 px or 10 ppt
+# bindsym $mod+Ctrl+j resize shrink height 10 px or 10 ppt
+# bindsym $mod+Ctrl+h resize grow width 10 px or 10 ppt
+mode "resize" {
+	bindsym j resize shrink width 10 px or 10 ppt
+	bindsym k resize grow height 10 px or 10 ppt
+	bindsym l resize shrink height 10 px or 10 ppt
+	bindsym semicolon resize grow width 10 px or 10 ppt
+ 
+	# same bindings, but for the arrow keys
+	bindsym Left resize shrink width 10 px or 10 ppt
+	bindsym Down resize grow height 10 px or 10 ppt
+	bindsym Up resize shrink height 10 px or 10 ppt
+	bindsym Right resize grow width 10 px or 10 ppt
+ 
+	# back to normal: Enter or Escape or $mod+r
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+ 
+# Полноэкранный режим для окна
+bindcode 95 fullscreen toggle
+# bindsym $mod+f fullscreen toggle
+ 
+# Релод конфигурационного файла
+bindsym $mod+Shift+c reload
+ 
+# Перезапуск i3
+bindsym $mod+shift+r restart
+ 
+# Закрыть окно в фокусе
+bindsym $mod+Shift+q kill
+ 
+# Изменения лэйаута (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+ 
+# TODO: проверить
+# focus the parent container
+# bindsym $mod+a focus parent
+
+
+ 
+######################################################
+## Автостарт ##
+######################################################
+ 
+# Convert background gif to jpg
+exec --no-startup-id convert -verbose $HOME/.config/i3/{gif.gif,gif.jpg}
+ 
+# Generate Colorscheme
+exec_always --no-startup-id wal -i $HOME/.config/i3/gif-0.jpg
+ 
+# Запуск compton
+exec compton --config $HOME/.config/compton/compton.conf
+ 
+# Language
+exec --no-startup-id setxkbmap -model pc105 -layout us,ru -option grp:win_space_toggle
+ 
+# Dunst
+exec --no-startup-id dunst
+ 
+# Kitty
+exec kitty
+ 
+# Polybar
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+ 
+# Cursor
+# TODO: узанать что это такое
+# exec_always --no-startup-id xsetroot -cursor_name left_ptr
+
+exec --no-startup-id notify-send "Привет!"
