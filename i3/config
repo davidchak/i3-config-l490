@@ -187,29 +187,15 @@ bindsym $mod+e layout toggle split
 ## Автостарт ##
 ######################################################
  
-# Convert background gif to jpg
-exec --no-startup-id convert -verbose $HOME/.config/i3/{gif.gif,gif.jpg}
- 
-# Generate Colorscheme
-exec_always --no-startup-id wal -i $HOME/.config/i3/gif-0.jpg
- 
 # Запуск compton
 exec compton --config $HOME/.config/compton/compton.conf
  
 # Language
 exec --no-startup-id setxkbmap -model pc105 -layout us,ru -option grp:win_space_toggle
  
-# Dunst
-exec --no-startup-id dunst
  
 # Kitty
 exec kitty
  
 # Polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
- 
-# Cursor
-# TODO: узанать что это такое
-# exec_always --no-startup-id xsetroot -cursor_name left_ptr
-
-exec --no-startup-id notify-send "Привет!"
